@@ -1,6 +1,8 @@
 package com.rnee.monkey;
 
 import com.rnee.monkey.Lexer;
+import com.rnee.monkey.Token;
+import com.rnee.monkey.TokenType;
 
 /**
 * Temp entry point
@@ -12,12 +14,10 @@ class Project {
     public static void main(String[] args) {
         System.out.println("Hi " + String.join(" ", args));
 
-        boolean lexed = Lexer.analyse("Sourcecode");
+        String example = "let five = 5;\nlet ten = 10;\nlet add = fn(x, y) {\nx + y;\n};\n\nlet result = add(five, ten);";
+        Lexer lexer = new Lexer(example);
+        Token t = lexer.nextToken();
 
-        for (int i = 0; i<4; i++) {
-            System.out.println(i);
-        }
-
-        System.out.println("Lexed succesfully: " + lexed);
+        System.out.println("Lexed succesfully: " + t);
     }
 }
