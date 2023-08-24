@@ -1,0 +1,6 @@
+{
+    // Extension Trigger task on save
+    "triggerTaskOnSave.tasks": {
+        "build code active": ["*.java"],
+    }
+}

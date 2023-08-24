@@ -3,21 +3,90 @@
     // for the documentation about the tasks.json format
     "version": "2.0.0",
     "tasks": [
+
+        // Build all code
         {
-            "label": "build",
+            "label": "build code",
             "type": "shell",
             "command": "javac",
             "args": [
                 "-d",
                 "out",
-                "src/*"
+                "src/*.java"
             ],
-            "problemMatcher": [],
+            "problemMatcher": {
+                "owner": "javac",
+                "fileLocation": [
+                    "relative",
+                    "${workspaceFolder}"
+                ],
+                "pattern": [
+                    {
+                        "regexp": "^(.*):(.*): (warning|error): (.*)$",
+                        "file": 1,
+                        "line": 2,
+                        "severity": 3,
+                        "message": 4
+                    }
+                ]
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "silent",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true
+            },
             "group": {
                 "kind": "build",
                 "isDefault": true
             }
         },
+
+        // Build code active file
+        {
+            "label": "build code active",
+            "type": "shell",
+            "command": "javac",
+            "args": [
+                "-cp",
+                "out",
+                "-d",
+                "out",
+                "${relativeFile}"
+            ],
+            "problemMatcher": {
+                "owner": "javac",
+                "fileLocation": [
+                    "relative",
+                    "${workspaceFolder}"
+                ],
+                "pattern": [
+                    {
+                        "regexp": "^(.*):(.*): (warning|error): (.*)$",
+                        "file": 1,
+                        "line": 2,
+                        "severity": 3,
+                        "message": 4
+                    }
+                ]
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "never",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            }
+        },
+
+        // Run main
         {
             "label": "run",
             "type": "shell",
@@ -25,39 +94,81 @@
             "args": [
                 "-cp",
                 "out",
-                "Project"
+                "com.rnee.monkey.Project"
             ],
             "problemMatcher": [],
             "group": {
                 "kind": "none",
                 "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true
             }
         },
+
+        // Build all documentation
         {
             "label": "build docs",
             "type": "shell",
-            "options": {"cwd": "docs"},
+            "options": {
+                "cwd": "docs"
+            },
             "command": "javadoc",
             "args": [
-                
                 "../src/*"
             ],
-            "problemMatcher": [],
+            "problemMatcher": {
+                "owner": "javadoc",
+                "fileLocation": [
+                    "relative",
+                    "${workspaceFolder}/docs"
+                ],
+                "pattern": {
+                    "regexp": "^(.*):(.*): (warning|error): (.*)$",
+                    "file": 1,
+                    "line": 2,
+                    "severity": 3,
+                    "message": 4
+                }
+            },
             "group": {
-                "kind": "none",
-                "isDefault": true
+                "kind": "build",
+                "isDefault": false
+            },
+            "runOptions": {},
+            "presentation": {
+                "echo": true,
+                "reveal": "silent",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true
             }
         },
+
+       
+        // Start webserver for documentation
         {
             "label": "docs",
             "type": "shell",
-            "options": {"cwd": "docs"},
+            "options": {
+                "cwd": "docs"
+            },
             "command": "jwebserver",
-            "problemMatcher": [],
-            "group": {
-                "kind": "none",
-                "isDefault": true
-            }
-        },
+            "presentation": {
+                "echo": true,
+                "reveal": "never",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "isBackground": true,
+        }
     ]
 }
