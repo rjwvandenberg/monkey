@@ -11,11 +11,11 @@
             "command": "javac",
             "args": [
                 "-d",
-                "out",
+                "out/src",
                 "src/*.java"
             ],
             "problemMatcher": {
-                "owner": "javac",
+                "owner": "javac all",
                 "fileLocation": [
                     "relative",
                     "${workspaceFolder}"
@@ -48,16 +48,100 @@
         {
             "label": "build code active",
             "type": "shell",
-            "command": "javac",
+            "command": "javac active",
             "args": [
                 "-cp",
-                "out",
+                "out/src",
                 "-d",
-                "out",
+                "out/src",
                 "${relativeFile}"
             ],
             "problemMatcher": {
                 "owner": "javac",
+                "fileLocation": [
+                    "relative",
+                    "${workspaceFolder}"
+                ],
+                "pattern": [
+                    {
+                        "regexp": "^(.*):(.*): (warning|error): (.*)$",
+                        "file": 1,
+                        "line": 2,
+                        "severity": 3,
+                        "message": 4
+                    }
+                ]
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "never",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            }
+        },
+
+        // Build all tests
+        {
+            "label": "build tests",
+            "type": "shell",
+            "command": "javac",
+            "args": [
+                "-d",
+                "out/tests",
+                "-cp",
+                "out/src",
+                "tests/*.java"
+            ],
+            "problemMatcher": {
+                "owner": "javac tests",
+                "fileLocation": [
+                    "relative",
+                    "${workspaceFolder}"
+                ],
+                "pattern": [
+                    {
+                        "regexp": "^(.*):(.*): (warning|error): (.*)$",
+                        "file": 1,
+                        "line": 2,
+                        "severity": 3,
+                        "message": 4
+                    }
+                ]
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "silent",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+
+        // Build test active file
+        {
+            "label": "build test active",
+            "type": "shell",
+            "command": "javac",
+            "args": [
+                "-cp",
+                "out/src",
+                "-d",
+                "out/tests",
+                "${relativeFile}"
+            ],
+            "problemMatcher": {
+                "owner": "javac active test",
                 "fileLocation": [
                     "relative",
                     "${workspaceFolder}"
@@ -93,10 +177,9 @@
             "command": "java",
             "args": [
                 "-cp",
-                "out",
+                "out/src",
                 "com.rnee.monkey.Project"
             ],
-            "problemMatcher": [],
             "group": {
                 "kind": "none",
                 "isDefault": true
@@ -105,6 +188,32 @@
                 "echo": true,
                 "reveal": "always",
                 "focus": true,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true
+            }
+        },
+
+        // Run tests
+        {
+            "label": "run tests",
+            "type": "shell",
+            "command": "java",
+            "args": [
+                "-cp",
+                "out/src",
+                "-cp",
+                "out/tests",
+                "com.rnee.monkey.TestUtils"
+            ],
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "silent",
+                "focus": false,
                 "panel": "shared",
                 "showReuseMessage": true,
                 "clear": true
