@@ -19,4 +19,13 @@ I will only be using the java standard library.
 
 ### Macros
 
+### Compiler
+Wrinting a compiler in GO book
+
+### vscode debugging
+Requires extension, done through tasks.
+
+### language server
+:)
+
 ## Project Tools
