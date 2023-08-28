@@ -4,4 +4,4 @@
 * @author	René van den Berg
 * @version	1
 */
-package com.rnee.monkey;
+package rnee.monkey;

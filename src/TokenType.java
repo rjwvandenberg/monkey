@@ -1,4 +1,4 @@
-package com.rnee.monkey;
+package rnee.monkey;
 
 /**
 * Types of Tokens.

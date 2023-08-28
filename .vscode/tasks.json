@@ -48,7 +48,7 @@
         {
             "label": "build code active",
             "type": "shell",
-            "command": "javac active",
+            "command": "javac",
             "args": [
                 "-cp",
                 "out/src",
@@ -92,10 +92,10 @@
             "type": "shell",
             "command": "javac",
             "args": [
-                "-d",
-                "out/tests",
                 "-cp",
                 "out/src",
+                "-d",
+                "out/tests",
                 "tests/*.java"
             ],
             "problemMatcher": {
@@ -135,7 +135,7 @@
             "command": "javac",
             "args": [
                 "-cp",
-                "out/src",
+                "'out/src/;out/tests/'",
                 "-d",
                 "out/tests",
                 "${relativeFile}"
@@ -178,7 +178,7 @@
             "args": [
                 "-cp",
                 "out/src",
-                "com.rnee.monkey.Project"
+                "rnee.monkey.Project"
             ],
             "group": {
                 "kind": "none",
@@ -201,10 +201,8 @@
             "command": "java",
             "args": [
                 "-cp",
-                "out/src",
-                "-cp",
-                "out/tests",
-                "com.rnee.monkey.TestUtils"
+                "'out/src/;out/tests/'",
+                "rnee.monkey.TestUtils"
             ],
             "group": {
                 "kind": "test",

@@ -1,4 +1,4 @@
-package com.rnee.monkey;
+package rnee.monkey;
 
 /**
 * The lexer converts sourcecode into an array of tokens.
@@ -6,7 +6,7 @@ package com.rnee.monkey;
 * @author	René van den Berg
 * @version	1
 */
-class Lexer {
+public class Lexer {
     String source;
 
     /**
@@ -25,7 +25,7 @@ class Lexer {
     *
     * @return		next token in sourcecode
     */
-    public Token nextToken() {
+    Token nextToken() {
         if (this.source.startsWith("let")) {
             return new Token(TokenType.Let, "let");
         } else {

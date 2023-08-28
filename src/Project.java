@@ -1,8 +1,8 @@
-package com.rnee.monkey;
+package rnee.monkey;
 
-import com.rnee.monkey.Lexer;
-import com.rnee.monkey.Token;
-import com.rnee.monkey.TokenType;
+import rnee.monkey.Lexer;
+import rnee.monkey.Token;
+import rnee.monkey.TokenType;
 
 /**
 * Temp entry point
