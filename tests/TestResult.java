@@ -1,6 +1,7 @@
 package rnee.monkey;
 
 import java.lang.Math;
+import java.lang.StringBuilder;
 
 /**
 * Provide methods to print and access test results.
@@ -13,22 +14,25 @@ import java.lang.Math;
 public class TestResult {
     Tester tester;
     boolean success;
-
-    String message;
     String err;
 
-    TestResult(Tester tester, boolean success, String message, String err) {
+    TestResult(Tester tester, boolean success, String err) {
         this.tester = tester;
         this.success = success;
-        this.message = message;
         this.err = err;
     }
 
     @Override
     public String toString() {
+        // File and line information
+        StringBuilder sb = new StringBuilder()
+            .append(tester.file).append(':').append(tester.method).append(':').append(tester.line).append(':');
+
         if (success) {
-            return message + ".";
+            sb.append(" pass");
         } else {
+            sb.append(" error: ").append(err).append('\n');
+
             // Tests and error formatting is too specific. Made for testing (object -> object) functions that have ordered outputs, works ok enough for now. 
             int before = 20;
             int after = 50;
@@ -50,9 +54,13 @@ public class TestResult {
 
             String exstr = expected.substring(offset, Math.min(offset+after, expected.length()));
             String acstr = actual.substring(offset, Math.min(offset+after, actual.length()));
-            String caret = " ".repeat(10 + 3 + before + Math.min(difference-before, 0)) + "^";
+            String caret = " ".repeat(4 + 10 + before + Math.min(difference-before, 0)) + "^";
 
-            return "error: " + message + err + ".\n" + "--- in:\n" + tester.in + "\n\nExpected: ..." + exstr + "...\nActual  : ..." + acstr + "...\n" + caret;
+            sb.append("    Expected: ").append(exstr).append('\n');
+            sb.append("    Actual  : ").append(acstr).append('\n');
+            sb.append(caret).append('\n');
         }
+
+        return sb.toString();
     }
 }

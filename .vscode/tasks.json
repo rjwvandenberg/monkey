@@ -208,6 +208,23 @@
                 "kind": "test",
                 "isDefault": true
             },
+            "problemMatcher": {
+                "owner": "tests",
+                "fileLocation": [
+                    "relative",
+                    "${workspaceFolder}/tests"
+                ],
+                "pattern": {
+                    "regexp": "^(.*):(.*):(.*): (error:|pass)(.*)$",
+                    "file": 1,
+                    "line": 3,
+                    "column": 0,
+                    "severity": 4,
+                    "message": 5,
+                    //"code": 2,
+                    //"kind": "file"
+                }
+            },
             "presentation": {
                 "echo": true,
                 "reveal": "silent",

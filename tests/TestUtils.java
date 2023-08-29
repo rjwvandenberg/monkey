@@ -6,7 +6,7 @@ class TestUtils {
     public static void main(String[] args) {
         System.out.println("Running Monkey tests...");
 
-        LexerTest.runTests();
+        new LexerTest().runTests();
 
         System.out.println("Done testing.");
     }

@@ -1,5 +1,8 @@
 package rnee.monkey;
 
+import java.lang.Thread;
+import java.lang.StackTraceElement;
+
 /**
 * Tester Object to provide repeatable tests for monkey.
 *
@@ -7,33 +10,43 @@ package rnee.monkey;
 * @version	1
 */
 public class Tester<A,B> {
+    public String method;
+    public int line;
+    public String file;
+    public String classname;
+
     public String name;
     public A in;
     public B expected;
     public B actual;
 
-    Tester(String name, A in, B expected) {
-        this.name = name;
+    Tester(A in, B expected) {
         this.in = in;
         this.expected = expected;
+
+        StackTraceElement caller = Thread.currentThread().getStackTrace()[2];
+        method = caller.getMethodName();
+        file = caller.getFileName();
+        line = caller.getLineNumber();
+        classname = caller.getClassName();
     }
 
     TestResult equality(B actual) {
         this.actual = actual;
         boolean equal = expected.equals(actual);
         if (equal) {
-            return success(name);
+            return success();
         } else {
-            return fail(name, " not equal");
+            return fail("value not equal to expected");
         }
     }
 
-    TestResult success(String message) {
-        return new TestResult(this, true, message, "");
+    TestResult success() {
+        return new TestResult(this, true, "");
     }
 
-    TestResult fail(String message, String err) {
-        return new TestResult(this, false, message, err);
+    TestResult fail(String err) {
+        return new TestResult(this, false, err);
     }
 
 }

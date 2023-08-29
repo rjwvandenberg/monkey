@@ -14,9 +14,15 @@ import java.util.Arrays;
 * @version	1
 */
 public class LexerTest {
-    static void runTests() {
+    String location;
+    LexerTest() {
+        location = "LexerTest.java";
+    }
+
+    void runTests() {
         TestResult[] tests = new TestResult[] {
             sampleTest(),
+            successTest(),
         };
 
         for (TestResult testResult : tests) {
@@ -24,7 +30,12 @@ public class LexerTest {
         }
     }
 
-    static TestResult sampleTest() {
+    TestResult successTest() {
+        Tester t = new Tester<String, String>("yep", "s");
+        return t.equality("s");
+    }
+
+    TestResult sampleTest() {
         String input = "=+(){},;";
         Token[] tokens = new Token[] {
             new Token(TokenType.Assign, "="),
@@ -38,9 +49,9 @@ public class LexerTest {
             new Token(TokenType.EOF, ""),
         };
         ArrayList expected = new ArrayList<Token>(Arrays.asList(tokens));
-        ArrayList actual = readN(new Lexer(input), 9);
+        ArrayList actual = LexerTest.readN(new Lexer(input), 9);
 
-        Tester t = new Tester<String, ArrayList<Token>>("Lexer|sample|", input, expected);
+        Tester t = new Tester<String, ArrayList<Token>>(input, expected);
         return t.equality(actual);
     }
 
