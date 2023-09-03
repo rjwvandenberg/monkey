@@ -31,6 +31,12 @@ enum TokenType {
     Function,
     Let;
 
+    /**
+    * Return token string for non-helper and non-literals. (Could do polymorphism witch asString() impl for each enum field above and abstract method defined on TokenType)
+    * TODO: Exception out non keywords as there won't be a string representation available for them.
+    * 
+    * @return	tokens as strings, helpers and literals as error message (this makes error messages valid code, should probably just do exceptions instead)
+    */
     String asString() {
         switch(this) {
             case Assign: return "=";

@@ -46,14 +46,16 @@ public class Lexer {
         else if ((t = startsWith(TokenType.RBrace)) != null) {}
         else if ((t = startsWith(TokenType.Semicolon)) != null) {}
         else if ((t = startsWith(TokenType.Comma)) != null) {}
-        else {
+        
+        // Seperated null check, incase logic above is incorrect
+        if (t == null) {
             t = new Token(TokenType.Illegal, source.substring(position, position+1));
             position += 1;
         }
         return t;
     }
 
-    Token startsWith(TokenType t) {
+    private Token startsWith(TokenType t) {
         if (source.startsWith(t.asString(), position)) {
             return makeToken(t);
         } else {
@@ -61,13 +63,13 @@ public class Lexer {
         }
     }
 
-    Token makeToken(TokenType t) {
+    private Token makeToken(TokenType t) {
         int start = position;
         position += t.asString().length();
         return new Token(t, source.substring(start, position));
     }
 
-    void skipWhitespace() {
+    private void skipWhitespace() {
         while (position < source.length() && Character.isWhitespace(source.charAt(position))) {
             position++;
         }
