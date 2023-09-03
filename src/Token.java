@@ -27,11 +27,11 @@ class Token {
             return false;
         }
         Token t = (Token)other;
-        return this.type == t.type;
+        return this.type == t.type && literal.equals(t.literal);
     }
 
     @Override
     public String toString() {
-        return "" + this.type + "[\"" + this.literal + "\"]";
+        return "" + this.type + "[\"" + literal + "\"]";
     }
 }

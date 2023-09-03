@@ -29,5 +29,21 @@ enum TokenType {
 
     // Keywords
     Function,
-    Let
+    Let;
+
+    String asString() {
+        switch(this) {
+            case Assign: return "=";
+            case Plus: return "+";
+            case Comma: return ",";
+            case Semicolon: return ";";
+            case LParen: return "(";
+            case RParen: return ")";
+            case LBrace: return "{";
+            case RBrace: return "}";
+            case Function: return "fn";
+            case Let: return "let";
+            default: return "" + this + " is not implemented. Should not asString() helpers or literals.";
+        } 
+    }
 }

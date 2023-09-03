@@ -18,9 +18,16 @@
 	
 	"For Loop": {
 		"scope": "java",
-		"prefix": ["for"],
+		"prefix": ["/for"],
 		"body": ["for (${1:init}; ${2:condition}; ${3:increment}) {", "\t$0", "}"],
 		"description": "A for loop."
+	},
+
+	"Foreach Loop": {
+		"scope": "java",
+		"prefix": ["/foreach"],
+		"body": ["for (${1:element} : ${2:collection}) {", "\t$0", "}"],
+		"description": "A foreach loop."
 	},
 
 	"Doc Comment": {

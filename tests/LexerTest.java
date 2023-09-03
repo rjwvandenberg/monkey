@@ -14,11 +14,6 @@ import java.util.Arrays;
 * @version	1
 */
 public class LexerTest {
-    String location;
-    LexerTest() {
-        location = "LexerTest.java";
-    }
-
     void runTests() {
         TestResult[] tests = new TestResult[] {
             sampleTest(),
@@ -42,8 +37,8 @@ public class LexerTest {
             new Token(TokenType.Plus, "+"),
             new Token(TokenType.LParen, "("),
             new Token(TokenType.RParen, ")"),
-            new Token(TokenType.LBrace, "["),
-            new Token(TokenType.RBrace, "]"),
+            new Token(TokenType.LBrace, "{"),
+            new Token(TokenType.RBrace, "}"),
             new Token(TokenType.Comma, ","),
             new Token(TokenType.Semicolon, ";"),
             new Token(TokenType.EOF, ""),
