@@ -36,9 +36,18 @@ public class Lexer {
         }
 
         Token t;
+        // Two character operators (before one character to prevent collision, e.g. == and =)
+        if ((t = startsWith(TokenType.Equals)) != null) {}
+        else if ((t = startsWith(TokenType.NotEquals)) != null) {}
         // One character operators and delimiters
-        if ((t = startsWith(TokenType.Assign)) != null) {}
+        else if ((t = startsWith(TokenType.Assign)) != null) {}
         else if ((t = startsWith(TokenType.Plus)) != null) {}
+        else if ((t = startsWith(TokenType.Minus)) != null) {}
+        else if ((t = startsWith(TokenType.Multiply)) != null) {}
+        else if ((t = startsWith(TokenType.Divide)) != null) {}
+        else if ((t = startsWith(TokenType.Lesser)) != null) {}
+        else if ((t = startsWith(TokenType.Greater)) != null) {}
+        else if ((t = startsWith(TokenType.Not)) != null) {}
         else if ((t = startsWith(TokenType.LParen)) != null) {}
         else if ((t = startsWith(TokenType.RParen)) != null) {}
         else if ((t = startsWith(TokenType.LBrace)) != null) {}
@@ -86,7 +95,7 @@ public class Lexer {
         if (endPosition > position) {
             String literal = source.substring(position, endPosition);
             position = endPosition;
-            
+
             TokenType tt = TokenType.lookupKeyword(literal);
             if (tt == null) {
                 tt = TokenType.Identifier;
