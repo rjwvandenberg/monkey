@@ -18,6 +18,7 @@ public class LexerTest {
         TestResult[] tests = new TestResult[] {
             sampleTest(),
             sample2Test(),
+            sample3Test(),
             successTest(),
         };
 
@@ -89,6 +90,29 @@ public class LexerTest {
             new Token(TokenType.Comma, ","),
             new Token(TokenType.Identifier, "ten"),
             new Token(TokenType.RParen, ")"),
+            new Token(TokenType.Semicolon, ";"),
+            new Token(TokenType.EOF, ""),
+        };
+        ArrayList expected = new ArrayList<Token>(Arrays.asList(tokens));
+        ArrayList actual = LexerTest.readN(new Lexer(input), tokens.length);
+        Tester t = new Tester<String, ArrayList<Token>>(input, expected);
+        return t.equality(actual);
+    }
+
+    TestResult sample3Test() {
+        String input = "!-/*5;\n5 < 10 > 5;";
+        Token[] tokens = new Token[] {
+            new Token(TokenType.Not, "!"),
+            new Token(TokenType.Minus, "-"),
+            new Token(TokenType.Divide, "/"),
+            new Token(TokenType.Multiply, "*"),
+            new Token(TokenType.Integer, "5"),
+            new Token(TokenType.Semicolon, ";"),
+            new Token(TokenType.Integer, "5"),
+            new Token(TokenType.Lesser, "<"),
+            new Token(TokenType.Integer, "10"),
+            new Token(TokenType.Greater, ">"),
+            new Token(TokenType.Integer, "5"),
             new Token(TokenType.Semicolon, ";"),
             new Token(TokenType.EOF, ""),
         };

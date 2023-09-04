@@ -18,6 +18,15 @@ enum TokenType {
     // Operators
     Assign,
     Plus,
+    Minus,
+    Multiply,
+    Divide,
+    Lesser,
+    Greater,
+
+    Equals,
+    NotEquals,
+    Not,
     
     // Delimiters
     Comma,
@@ -29,7 +38,14 @@ enum TokenType {
 
     // Keywords
     Function,
-    Let;
+    Let,
+
+    True,
+    False,
+
+    If,
+    Else,
+    Return;
 
     /**
     * Return token string for non-helper and non-literals. (Could do polymorphism witch asString() impl for each enum field above and abstract method defined on TokenType)
@@ -41,14 +57,32 @@ enum TokenType {
         switch(this) {
             case Assign: return "=";
             case Plus: return "+";
+            case Minus: return "-";
+            case Multiply: return "*";
+            case Divide: return "/";
+            case Lesser: return "<";
+            case Greater: return ">";
+
+            case Equals: return "==";
+            case NotEquals: return "!=";
+            case Not: return "!";
+
             case Comma: return ",";
             case Semicolon: return ";";
             case LParen: return "(";
             case RParen: return ")";
             case LBrace: return "{";
             case RBrace: return "}";
+
             case Function: return "fn";
             case Let: return "let";
+
+            case True: return "true";
+            case False: return "false";
+
+            case If: return "if";
+            case Else: return "else";
+            case Return: return "return";
             default: return "" + this + " is not implemented. Should not asString() helpers or literals.";
         } 
     }

@@ -35,7 +35,7 @@ public class Lexer {
             return new Token(TokenType.EOF, "");
         }
 
-        Token t;        
+        Token t;
         // One character operators and delimiters
         if ((t = startsWith(TokenType.Assign)) != null) {}
         else if ((t = startsWith(TokenType.Plus)) != null) {}
@@ -82,13 +82,20 @@ public class Lexer {
         while (endPosition < source.length() && Character.isAlphabetic(source.charAt(endPosition))) {
             endPosition += 1;
         }
-        String literal = source.substring(position, endPosition);
-        position = endPosition;
-        TokenType tt = TokenType.lookupKeyword(literal);
-        if (tt == null) {
-            tt = TokenType.Identifier;
+        
+        if (endPosition > position) {
+            String literal = source.substring(position, endPosition);
+            position = endPosition;
+            
+            TokenType tt = TokenType.lookupKeyword(literal);
+            if (tt == null) {
+                tt = TokenType.Identifier;
+            }
+            return new Token(tt, literal);
+        } else {
+            return null;
         }
-        return new Token(tt, literal);
+        
     }
 
     private Token startsWith(TokenType t) {
