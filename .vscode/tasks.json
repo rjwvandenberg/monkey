@@ -3,8 +3,6 @@
     // for the documentation about the tasks.json format
     "version": "2.0.0",
     "tasks": [
-
-        // Build all code
         {
             "label": "build code",
             "type": "shell",
@@ -43,8 +41,6 @@
                 "isDefault": true
             }
         },
-
-        // Build code active file
         {
             "label": "build code active",
             "type": "shell",
@@ -85,8 +81,6 @@
                 "isDefault": false
             }
         },
-
-        // Build all tests
         {
             "label": "build tests",
             "type": "shell",
@@ -127,8 +121,6 @@
                 "isDefault": true
             }
         },
-
-        // Build test active file
         {
             "label": "build test active",
             "type": "shell",
@@ -169,8 +161,6 @@
                 "isDefault": false
             }
         },
-
-        // Run main
         {
             "label": "run",
             "type": "shell",
@@ -193,8 +183,26 @@
                 "clear": true
             }
         },
-
-        // Run tests
+        {
+            "label": "run repl",
+            "type": "shell",
+            "command": "java",
+            "args": [
+                "-cp",
+                "out/src",
+                "rnee.monkey.Project",
+                "repl"
+            ],
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": []
+        },
         {
             "label": "run tests",
             "type": "shell",
@@ -220,9 +228,7 @@
                     "line": 3,
                     "column": 0,
                     "severity": 4,
-                    "message": 5,
-                    //"code": 2,
-                    //"kind": "file"
+                    "message": 5
                 }
             },
             "presentation": {
@@ -234,8 +240,6 @@
                 "clear": true
             }
         },
-
-        // Build all documentation
         {
             "label": "build docs",
             "type": "shell",
@@ -274,9 +278,6 @@
                 "clear": true
             }
         },
-
-       
-        // Start webserver for documentation
         {
             "label": "docs",
             "type": "shell",
@@ -292,7 +293,7 @@
                 "showReuseMessage": true,
                 "clear": false
             },
-            "isBackground": true,
+            "isBackground": true
         }
     ]
 }

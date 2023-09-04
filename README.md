@@ -6,6 +6,8 @@ I will only be using the java standard library.
 ## Book
 
 ### Lexer
+Lexer, Token, TokenType.
+LexerTest
 
 ### Parser
 
@@ -14,6 +16,7 @@ I will only be using the java standard library.
 ### Internal Object System
 
 ### Evaluator
+Repl.
 
 ## Other Stuff
 
@@ -29,3 +32,4 @@ Requires extension, done through tasks.
 :)
 
 ## Project Tools
+Tester, TestResult, TestUtils.
