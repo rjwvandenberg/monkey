@@ -29,16 +29,15 @@ public class Lexer {
     * @return		next token in sourcecode
     */
     Token nextToken() {
-        //Lets make whitespace illegal for now
-        //skipWhitespace();
+        skipWhitespace();
         
         if (position >= source.length()) {
             return new Token(TokenType.EOF, "");
         }
 
         Token t;        
-        if ((t = startsWith(TokenType.Let)) != null) {}
-        else if ((t = startsWith(TokenType.Assign)) != null) {}
+        // One character operators and delimiters
+        if ((t = startsWith(TokenType.Assign)) != null) {}
         else if ((t = startsWith(TokenType.Plus)) != null) {}
         else if ((t = startsWith(TokenType.LParen)) != null) {}
         else if ((t = startsWith(TokenType.RParen)) != null) {}
@@ -46,13 +45,50 @@ public class Lexer {
         else if ((t = startsWith(TokenType.RBrace)) != null) {}
         else if ((t = startsWith(TokenType.Semicolon)) != null) {}
         else if ((t = startsWith(TokenType.Comma)) != null) {}
-        
+        // Keywords and literals
+        else if ((t = readInteger()) != null) {}
+        else if ((t = readAlphabetic()) != null) {}
+
         // Seperated null check, incase logic above is incorrect
         if (t == null) {
             t = new Token(TokenType.Illegal, source.substring(position, position+1));
             position += 1;
         }
         return t;
+    }
+
+    private Token readInteger() {
+        int endPosition = position;
+        while (endPosition < source.length() && Character.isDigit(source.charAt(endPosition))) {
+            endPosition += 1;
+        }
+        if (endPosition > position ) {
+            Token t = new Token(TokenType.Integer, source.substring(position, endPosition));
+            position = endPosition;
+            return t;
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * Read an alphabetic string and return it's token. The token can be a keyword (Let or Function) 
+    * or an Identifier.
+    *
+    * @return		token Let, Function or Identifier
+    */
+    private Token readAlphabetic() {
+        int endPosition = position;
+        while (endPosition < source.length() && Character.isAlphabetic(source.charAt(endPosition))) {
+            endPosition += 1;
+        }
+        String literal = source.substring(position, endPosition);
+        position = endPosition;
+        TokenType tt = TokenType.lookupKeyword(literal);
+        if (tt == null) {
+            tt = TokenType.Identifier;
+        }
+        return new Token(tt, literal);
     }
 
     private Token startsWith(TokenType t) {

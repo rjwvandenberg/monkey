@@ -52,4 +52,10 @@ enum TokenType {
             default: return "" + this + " is not implemented. Should not asString() helpers or literals.";
         } 
     }
+
+    static TokenType lookupKeyword(String token) {
+        if (token.equals(Function.asString())) { return Function; }
+        else if (token.equals(Let.asString())) { return Let; }
+        return null;
+    }
 }

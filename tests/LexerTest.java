@@ -94,7 +94,6 @@ public class LexerTest {
         };
         ArrayList expected = new ArrayList<Token>(Arrays.asList(tokens));
         ArrayList actual = LexerTest.readN(new Lexer(input), tokens.length);
-
         Tester t = new Tester<String, ArrayList<Token>>(input, expected);
         return t.equality(actual);
     }
