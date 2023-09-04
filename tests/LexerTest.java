@@ -19,17 +19,16 @@ public class LexerTest {
             sampleTest(),
             sample2Test(),
             sample3Test(),
-            successTest(),
+            allTokensTest(),
+            operatorCollisionTest(),
+            keywordPrefixTest(),
+            emptyTest(),
+            skipWhitespaceTest(),
         };
 
         for (TestResult testResult : tests) {
             System.out.println(testResult);
         }
-    }
-
-    TestResult successTest() {
-        Tester t = new Tester<String, String>("yep", "s");
-        return t.equality("s");
     }
 
     TestResult sampleTest() {
@@ -122,13 +121,110 @@ public class LexerTest {
         return t.equality(actual);
     }
 
-    
+    TestResult allTokensTest() {
+        String input = "\0\nalphabeticidentifier\n012345678\n=\n+\n-\n*\n/\n<\n>\n==\n!=\n!\n,\n;\n(\n)\n{\n}\nfn\nlet\ntrue\nfalse\nif\nelse\nreturn";
+        Token[] tokens = new Token[] {
+            new Token(TokenType.Illegal, "\0"),
+            new Token(TokenType.Identifier, "alphabeticidentifier"),
+            new Token(TokenType.Integer, "012345678"),
+            new Token(TokenType.Assign, "="),
+            new Token(TokenType.Plus, "+"),
+            new Token(TokenType.Minus, "-"),
+            new Token(TokenType.Multiply, "*"),
+            new Token(TokenType.Divide, "/"),
+            new Token(TokenType.Lesser, "<"),
+            new Token(TokenType.Greater, ">"),
+            new Token(TokenType.Equals, "=="),
+            new Token(TokenType.NotEquals, "!="),
+            new Token(TokenType.Not, "!"),
+            new Token(TokenType.Comma, ","),
+            new Token(TokenType.Semicolon, ";"),
+            new Token(TokenType.LParen, "("),
+            new Token(TokenType.RParen, ")"),
+            new Token(TokenType.LBrace, "{"),
+            new Token(TokenType.RBrace, "}"),
+            new Token(TokenType.Function, "fn"),
+            new Token(TokenType.Let, "let"),
+            new Token(TokenType.True, "true"),
+            new Token(TokenType.False, "false"),
+            new Token(TokenType.If, "if"),
+            new Token(TokenType.Else, "else"),
+            new Token(TokenType.Return, "return"),
+            new Token(TokenType.EOF, ""),
+        };
+        ArrayList expected = new ArrayList<Token>(Arrays.asList(tokens));
+        ArrayList actual = LexerTest.readAll(new Lexer(input));
+        Tester t = new Tester<String, ArrayList<Token>>(input, expected);
+        return t.equality(actual);
+    }
+
+    TestResult operatorCollisionTest() {
+        String input = "===!!=";
+        Token[] tokens = new Token[] {
+            new Token(TokenType.Equals, "=="),
+            new Token(TokenType.Assign, "="),
+            new Token(TokenType.Not, "!"),
+            new Token(TokenType.NotEquals, "!="),
+            new Token(TokenType.EOF, ""),
+        };
+        ArrayList expected = new ArrayList<Token>(Arrays.asList(tokens));
+        ArrayList actual = LexerTest.readAll(new Lexer(input));
+        Tester t = new Tester<String, ArrayList<Token>>(input, expected);
+        return t.equality(actual);
+    }
+
+    TestResult keywordPrefixTest() {
+        String input = "ifelse";
+        Token[] tokens = new Token[] {
+            new Token(TokenType.Identifier, "ifelse"),
+            new Token(TokenType.EOF, ""),
+        };
+        ArrayList expected = new ArrayList<Token>(Arrays.asList(tokens));
+        ArrayList actual = LexerTest.readAll(new Lexer(input));
+        Tester t = new Tester<String, ArrayList<Token>>(input, expected);
+        return t.equality(actual);
+    }
+
+    TestResult emptyTest() {
+        String input = "";
+        Token[] tokens = new Token[] {
+            new Token(TokenType.EOF, ""),
+            new Token(TokenType.EOF, ""),
+            new Token(TokenType.EOF, ""),
+        };
+        ArrayList expected = new ArrayList<Token>(Arrays.asList(tokens));
+        ArrayList actual = LexerTest.readN(new Lexer(input), 3);
+        Tester t = new Tester<String, ArrayList<Token>>(input, expected);
+        return t.equality(actual);
+    }
+
+    TestResult skipWhitespaceTest() {
+        String input = "\t\n\r\f ";
+        Token[] tokens = new Token[] {
+            new Token(TokenType.EOF, ""),
+        };
+        ArrayList expected = new ArrayList<Token>(Arrays.asList(tokens));
+        ArrayList actual = LexerTest.readAll(new Lexer(input));
+        Tester t = new Tester<String, ArrayList<Token>>(input, expected);
+        return t.equality(actual);
+    }
+
+    static ArrayList<Token> readAll(Lexer lexer) {
+        int hardStop = 0;
+        ArrayList l = new ArrayList<Token>();
+        Token t = new Token(TokenType.Illegal, "");
+        while (hardStop < lexer.source.length() && t.type != TokenType.EOF) {
+            t = lexer.nextToken();
+            l.add(t);
+            hardStop++;
+        }
+        return l;
+    }
 
     static ArrayList<Token> readN(Lexer lexer, int n) {
         ArrayList l = new ArrayList<Token>();
         for (int i = 0; i < n; i++) {
-            l.add
-            (lexer.nextToken());
+            l.add(lexer.nextToken());
         }
         return l;
     }

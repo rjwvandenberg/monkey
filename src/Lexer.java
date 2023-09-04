@@ -115,6 +115,13 @@ public class Lexer {
         }
     }
 
+    /**
+    * Only use with operators, keywords. Do not use with literals.
+    * Makes token and advances position.
+    *
+    * @param	t	non-literal tokentypes
+    * @return		token with tokentype t
+    */
     private Token makeToken(TokenType t) {
         int start = position;
         position += t.asString().length();
