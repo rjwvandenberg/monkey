@@ -1,5 +1,7 @@
 package rnee.monkey;
 
+import java.util.Optional;
+
 /**
 * The lexer converts sourcecode into an array of tokens.
 *
@@ -35,49 +37,63 @@ public class Lexer {
             return new Token(TokenType.EOF, "");
         }
 
-        Token t;
-        // Two character operators (before one character to prevent collision, e.g. == and =)
-        if ((t = startsWith(TokenType.Equals)) != null) {}
-        else if ((t = startsWith(TokenType.NotEquals)) != null) {}
-        // One character operators and delimiters
-        else if ((t = startsWith(TokenType.Assign)) != null) {}
-        else if ((t = startsWith(TokenType.Plus)) != null) {}
-        else if ((t = startsWith(TokenType.Minus)) != null) {}
-        else if ((t = startsWith(TokenType.Multiply)) != null) {}
-        else if ((t = startsWith(TokenType.Divide)) != null) {}
-        else if ((t = startsWith(TokenType.Lesser)) != null) {}
-        else if ((t = startsWith(TokenType.Greater)) != null) {}
-        else if ((t = startsWith(TokenType.Not)) != null) {}
-        else if ((t = startsWith(TokenType.LParen)) != null) {}
-        else if ((t = startsWith(TokenType.RParen)) != null) {}
-        else if ((t = startsWith(TokenType.LBrace)) != null) {}
-        else if ((t = startsWith(TokenType.RBrace)) != null) {}
-        else if ((t = startsWith(TokenType.Semicolon)) != null) {}
-        else if ((t = startsWith(TokenType.Comma)) != null) {}
-        // Keywords and literals
-        else if ((t = readInteger()) != null) {}
-        else if ((t = readAlphabetic()) != null) {}
-
-        // Seperated null check, incase logic above is incorrect
-        if (t == null) {
-            t = new Token(TokenType.Illegal, source.substring(position, position+1));
-            position += 1;
+        Optional<Token> t = readOperator();
+        if (t.isEmpty()) {
+            t = readInteger();
         }
-        return t;
+        if (t.isEmpty()) {
+            t = readAlphabetic();
+        }
+        
+        if(t.isEmpty()) {
+            return makeIllegalToken();
+        } else {
+            return t.get();
+        }
     }
 
-    private Token readInteger() {
-        int endPosition = position;
-        while (endPosition < source.length() && Character.isDigit(source.charAt(endPosition))) {
-            endPosition += 1;
+    /**
+    * Detect operator or delimitor.
+    * 
+    * @return		Optional of detected token type, empty otherwise.
+    */
+    private Optional<Token> readOperator() {
+        TokenType tt = null;
+        // Two character operators (before one character to prevent collision, e.g. == and =)
+        if (startsWith(TokenType.Equals)) { tt = TokenType.Equals; }
+        else if (startsWith(TokenType.NotEquals)) { tt = TokenType.NotEquals; }
+        // One character operators and delimiters
+        else if (startsWith(TokenType.Assign)) { tt = TokenType.Assign; }
+        else if (startsWith(TokenType.Plus)) { tt = TokenType.Plus; }
+        else if (startsWith(TokenType.Minus)) { tt = TokenType.Minus; }
+        else if (startsWith(TokenType.Multiply)) { tt = TokenType.Multiply; }
+        else if (startsWith(TokenType.Divide)) { tt = TokenType.Divide; }
+        else if (startsWith(TokenType.Lesser)) { tt = TokenType.Lesser; }
+        else if (startsWith(TokenType.Greater)) { tt = TokenType.Greater; }
+        else if (startsWith(TokenType.Not)) {tt = TokenType.Not; }
+        else if (startsWith(TokenType.LParen)) { tt = TokenType.LParen; }
+        else if (startsWith(TokenType.RParen)) { tt = TokenType.RParen; }
+        else if (startsWith(TokenType.LBrace)) {tt = TokenType.LBrace; }
+        else if (startsWith(TokenType.RBrace)) { tt = TokenType.RBrace; }
+        else if (startsWith(TokenType.Semicolon)) { tt = TokenType.Semicolon; }
+        else if (startsWith(TokenType.Comma)) { tt = TokenType.Comma; }
+
+        Token t = null;
+        if (tt != null) {
+            t = makeToken(tt);
         }
-        if (endPosition > position ) {
-            Token t = new Token(TokenType.Integer, source.substring(position, endPosition));
-            position = endPosition;
-            return t;
-        } else {
-            return null;
+        return Optional.ofNullable(t);
+    }
+
+    private Optional<Token> readInteger() {
+        int start = position;
+        skipDigits();
+
+        Token t = null;
+        if (position > start) {
+            t = new Token(TokenType.Integer, source.substring(start, position));
         }
+        return Optional.ofNullable(t);
     }
 
     /**
@@ -86,33 +102,26 @@ public class Lexer {
     *
     * @return		token Let, Function or Identifier
     */
-    private Token readAlphabetic() {
-        int endPosition = position;
-        while (endPosition < source.length() && Character.isAlphabetic(source.charAt(endPosition))) {
-            endPosition += 1;
-        }
+    private Optional<Token> readAlphabetic() {
+        int start = position;
+        skipAlphabetic();
         
-        if (endPosition > position) {
-            String literal = source.substring(position, endPosition);
-            position = endPosition;
+        Token t = null;
+        if (position > start) {
+            String literal = source.substring(start, position);
 
-            TokenType tt = TokenType.lookupKeyword(literal);
-            if (tt == null) {
-                tt = TokenType.Identifier;
+            Optional<TokenType> tt = TokenType.lookupKeyword(literal);
+            if (tt.isEmpty()) {
+                t = new Token(TokenType.Identifier, literal);
+            } else {
+                t = new Token(tt.get(), literal);
             }
-            return new Token(tt, literal);
-        } else {
-            return null;
         }
-        
+        return Optional.ofNullable(t);        
     }
 
-    private Token startsWith(TokenType t) {
-        if (source.startsWith(t.asString(), position)) {
-            return makeToken(t);
-        } else {
-            return null;
-        }
+    private boolean startsWith(TokenType t) {
+        return source.startsWith(t.asString(), position);
     }
 
     /**
@@ -128,9 +137,27 @@ public class Lexer {
         return new Token(t, source.substring(start, position));
     }
 
+    private Token makeIllegalToken() {
+        Token token = new Token(TokenType.Illegal, source.substring(position, position+1));
+        position += 1;
+        return token;
+    }
+
+    private void skipDigits() {
+        while (position < source.length() && Character.isDigit(source.charAt(position))) {
+            position += 1;
+        }
+    }
+
+    private void skipAlphabetic() {
+        while (position < source.length() && Character.isAlphabetic(source.charAt(position))) {
+            position += 1;
+        }
+    }
+
     private void skipWhitespace() {
         while (position < source.length() && Character.isWhitespace(source.charAt(position))) {
-            position++;
+            position += 1;
         }
     }
 }

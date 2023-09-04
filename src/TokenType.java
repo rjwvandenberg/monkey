@@ -1,5 +1,7 @@
 package rnee.monkey;
 
+import java.util.Optional;
+
 /**
 * Types of Tokens.
 *
@@ -87,14 +89,16 @@ enum TokenType {
         } 
     }
 
-    static TokenType lookupKeyword(String token) {
-        if (token.equals(Function.asString())) { return Function; }
-        else if (token.equals(Let.asString())) { return Let; }
-        else if (token.equals(If.asString())) {return If; }
-        else if (token.equals(Else.asString())) { return Else; }
-        else if (token.equals(Return.asString())) { return Return; }
-        else if (token.equals(True.asString())) { return True; }
-        else if (token.equals(False.asString())) { return False; }
-        return null;
+    static Optional<TokenType> lookupKeyword(String token) {
+        TokenType tt = null;
+        if (token.equals(Function.asString())) { tt = Function; }
+        else if (token.equals(Let.asString())) { tt = Let; }
+        else if (token.equals(If.asString())) { tt = If; }
+        else if (token.equals(Else.asString())) {tt = Else; }
+        else if (token.equals(Return.asString())) { tt = Return; }
+        else if (token.equals(True.asString())) { tt = True; }
+        else if (token.equals(False.asString())) { tt = False; }
+        
+        return Optional.ofNullable(tt);
     }
 }
