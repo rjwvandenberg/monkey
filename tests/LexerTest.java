@@ -17,6 +17,7 @@ public class LexerTest {
     void runTests() {
         TestResult[] tests = new TestResult[] {
             sampleTest(),
+            sample2Test(),
             successTest(),
         };
 
@@ -45,6 +46,54 @@ public class LexerTest {
         };
         ArrayList expected = new ArrayList<Token>(Arrays.asList(tokens));
         ArrayList actual = LexerTest.readN(new Lexer(input), 9);
+
+        Tester t = new Tester<String, ArrayList<Token>>(input, expected);
+        return t.equality(actual);
+    }
+
+    TestResult sample2Test() {
+        String input = "let five = 5;\nlet ten = 10;\n\nlet add = fn(x,y) {\n\tx + y;\n};\n\nlet result = add(five, ten);";
+        Token[] tokens = new Token[] {
+            new Token(TokenType.Let, "let"),
+            new Token(TokenType.Identifier, "five"),
+            new Token(TokenType.Assign, "="),
+            new Token(TokenType.Integer, "5"),
+            new Token(TokenType.Semicolon, ";"),
+            new Token(TokenType.Let, "let"),
+            new Token(TokenType.Identifier, "ten"),
+            new Token(TokenType.Assign, "="),
+            new Token(TokenType.Integer, "10"),
+            new Token(TokenType.Semicolon, ";"),
+            new Token(TokenType.Let, "let"),
+            new Token(TokenType.Identifier, "add"),
+            new Token(TokenType.Assign, "="),
+            new Token(TokenType.Function, "fn"),
+            new Token(TokenType.LParen, "("),
+            new Token(TokenType.Identifier, "x"),
+            new Token(TokenType.Comma, ","),
+            new Token(TokenType.Identifier, "y"),
+            new Token(TokenType.RParen, ")"),
+            new Token(TokenType.LBrace, "{"),
+            new Token(TokenType.Identifier, "x"),
+            new Token(TokenType.Plus, "+"),
+            new Token(TokenType.Identifier, "y"),
+            new Token(TokenType.Semicolon, ";"),
+            new Token(TokenType.RBrace, "}"),
+            new Token(TokenType.Semicolon, ";"),
+            new Token(TokenType.Let, "let"),
+            new Token(TokenType.Identifier, "result"),
+            new Token(TokenType.Assign, "="),
+            new Token(TokenType.Identifier, "add"),
+            new Token(TokenType.LParen, "("),
+            new Token(TokenType.Identifier, "five"),
+            new Token(TokenType.Comma, ","),
+            new Token(TokenType.Identifier, "ten"),
+            new Token(TokenType.RParen, ")"),
+            new Token(TokenType.Semicolon, ";"),
+            new Token(TokenType.EOF, ""),
+        };
+        ArrayList expected = new ArrayList<Token>(Arrays.asList(tokens));
+        ArrayList actual = LexerTest.readN(new Lexer(input), tokens.length);
 
         Tester t = new Tester<String, ArrayList<Token>>(input, expected);
         return t.equality(actual);
