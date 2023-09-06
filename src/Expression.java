@@ -1,5 +1,7 @@
 package rnee.monkey;
 
+import rnee.monkey.Token;
+
 /**
 * Expression Syntax Tree Node.
 *
@@ -8,7 +10,7 @@ package rnee.monkey;
 */
 class Expression extends Node {
     Expression(Token token) {
-
+        
         super(token);
     }
 }

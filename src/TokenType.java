@@ -8,7 +8,7 @@ import java.util.Optional;
 * @author	René van den Berg
 * @version	1
 */
-enum TokenType {
+public enum TokenType {
     // Helper
     Illegal,
     EOF,

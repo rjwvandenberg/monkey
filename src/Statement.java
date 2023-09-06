@@ -8,7 +8,6 @@ package rnee.monkey;
 */
 class Statement extends Node {
     Statement(Token token) {
-
         super(token);
     }
 }

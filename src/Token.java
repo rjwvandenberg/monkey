@@ -6,7 +6,7 @@ package rnee.monkey;
 * @author	René van den Berg
 * @version	1
 */
-class Token {
+public class Token {
     TokenType type;
     String literal;
 

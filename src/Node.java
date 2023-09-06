@@ -17,4 +17,8 @@ abstract class Node {
     String tokenLiteral() {
         return token.literal;
     }
+
+    TokenType tokenType() {
+        return token.type;
+    }
 }
