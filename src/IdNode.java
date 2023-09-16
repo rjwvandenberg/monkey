@@ -1,4 +1,11 @@
 package rnee.monkey;
+
+/**
+* Identifier Syntax Tree Node.
+*
+* @author	René van den Berg
+* @version	1
+*/
 class IdNode extends Expression {
     IdNode(Token literal) {
         super(literal);

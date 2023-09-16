@@ -40,6 +40,7 @@ class Parser {
         switch(first.type) {
             case Let: return parseLet();
             case Return: return parseReturn();
+            case If: return parseIf();
             default: {
                 nextToken();
                 throw new ParseException("Invalid statement token: " + first.toString());
@@ -75,6 +76,13 @@ class Parser {
 
         checkToken(TokenType.RBrace);
         return l;
+    }
+
+    IfNode parseIf() throws ParseException {
+        Token literal = nextToken();
+        Expression condition = parseExpression();
+        ArrayList<Statement> block = parseBlock();
+        return new IfNode(literal, condition, block);
     }
 
     Expression parseExpression() throws ParseException {

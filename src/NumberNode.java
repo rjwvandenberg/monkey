@@ -1,4 +1,11 @@
 package rnee.monkey;
+
+/**
+* Number Syntax Tree Node.
+*
+* @author	René van den Berg
+* @version	1
+*/
 class NumberNode extends Expression {
     NumberNode(Token literal) {
         super(literal);

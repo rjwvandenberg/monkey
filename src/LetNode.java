@@ -1,5 +1,11 @@
 package rnee.monkey;
 
+/**
+* Let Syntax Tree Node.
+*
+* @author	René van den Berg
+* @version	1
+*/
 class LetNode extends Statement {
     IdNode name;
     Expression value;

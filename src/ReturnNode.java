@@ -1,5 +1,11 @@
 package rnee.monkey;
 
+/**
+* Return Syntax Tree Node.
+*
+* @author	René van den Berg
+* @version	1
+*/
 class ReturnNode extends Statement {
     Expression expr;
 

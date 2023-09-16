@@ -1,5 +1,11 @@
 package rnee.monkey;
 
+/**
+* InvalidStatement Syntax Tree Node.
+*
+* @author	René van den Berg
+* @version	1
+*/
 class InvalidStatement extends Statement {
     InvalidStatement(Token t) {
         super(t);
