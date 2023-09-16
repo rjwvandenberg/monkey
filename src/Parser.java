@@ -40,7 +40,6 @@ class Parser {
         switch(first.type) {
             case Let: return parseLet();
             case Return: return parseReturn();
-            case If: return parseIf();
             default: {
                 nextToken();
                 throw new ParseException("Invalid statement token: " + first.toString());
@@ -85,12 +84,21 @@ class Parser {
         return new IfNode(literal, condition, block);
     }
 
+    ElseNode parseElse() throws ParseException {
+        Token literal = nextToken();
+        ArrayList<Statement> block = parseBlock();
+        return new ElseNode(literal, block);
+    }
+
     Expression parseExpression() throws ParseException {
         // For now only accept simple integer/identifier, needs to be expanded with parser logic for multitoken expr.
         
         switch(peekToken().type) {
             case Integer: return parseNumber();
             case Identifier: return parseIdentifier();
+            // add elseif? or put it in Else
+            case If: return parseIf();
+            case Else: return parseElse();
             default: throw new ParseException("Invalid expression token: " + nextToken().toString());
         }
     }

@@ -3,18 +3,15 @@ package rnee.monkey;
 import java.util.ArrayList;
 
 /**
-* If Syntax Tree Node.
+* Else Syntax Tree Node
 *
 * @author	René van den Berg
 * @version	1
 */
-class IfNode extends Expression {
-    Expression condition;
+class ElseNode extends Expression {
     ArrayList<Statement> block;
-    
-    IfNode(Token t, Expression condition, ArrayList<Statement> block) {
+    ElseNode(Token t, ArrayList<Statement> block) {
         super(t);
-        this.condition = condition;
         this.block = block;
     }
 
@@ -24,10 +21,10 @@ class IfNode extends Expression {
             return true;
         } else if (other == null) {
             return false;
-        } else if (!(other instanceof IfNode)) {
+        } else if (!(other instanceof ElseNode)) {
             return false;
-        } 
-        IfNode i = (IfNode)other;
-        return condition.equals(i.condition) && block.equals(i.block);
+        }
+        ElseNode e = (ElseNode)other;
+        return block.equals(e.block);
     }
 }

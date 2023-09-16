@@ -22,6 +22,7 @@ class ParserTest {
             returnTest(),
             blockTest(),
             ifTest(),
+            elseTest(),
         };
 
         for (TestResult testResult : tests) {
@@ -103,14 +104,29 @@ class ParserTest {
     }
 
     TestResult ifTest() {
-        String input = "if expr {} if var { let id=15; return 90; }";
+        String input = "return if expr {}; return if var { let id=15; return 90; };";
         ArrayList<Token> tokens = getTokens(input);
         Statement[] statements = new Statement[] {
-            new IfNode(k("if"), new IdNode(id("expr")), new ArrayList<Statement>()),
-            new IfNode(k("if"), new IdNode(id("var")), new ArrayList<Statement>(Arrays.asList(new Statement[]{
+            new ReturnNode(k("return"), new IfNode(k("if"), new IdNode(id("expr")), new ArrayList<Statement>())),
+            new ReturnNode(k("return"), new IfNode(k("if"), new IdNode(id("var")), new ArrayList<Statement>(Arrays.asList(new Statement[]{
                 new LetNode(k("let"), new IdNode(id("id")), new NumberNode(i("15"))),
                 new ReturnNode(k("return"), new NumberNode(i("90")))
-            })))
+            }))))
+        };
+        ArrayList<Statement> expected = new ArrayList(Arrays.asList(statements));
+        ArrayList<Statement> actual = new Parser(tokens).parse();
+        Tester t = new Tester(tokens, expected);
+        return t.equality(actual);
+    }
+
+    TestResult elseTest() {
+        String input = "return else { let id=15; return 90; };";
+        ArrayList<Token> tokens = getTokens(input);
+        Statement[] statements = new Statement[] {
+            new ReturnNode(k("return"), new ElseNode(k("else"), new ArrayList<Statement>(Arrays.asList(new Statement[]{
+                new LetNode(k("let"), new IdNode(id("id")), new NumberNode(i("15"))),
+                new ReturnNode(k("return"), new NumberNode(i("90")))
+            }))))
         };
         ArrayList<Statement> expected = new ArrayList(Arrays.asList(statements));
         ArrayList<Statement> actual = new Parser(tokens).parse();
