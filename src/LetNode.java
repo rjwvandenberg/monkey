@@ -32,6 +32,6 @@ class LetNode extends Statement {
 
     @Override
     public String toString() {
-        return "Letnode[" + tokenLiteral() + "," + name + "," + value + "]";
+        return "let " + name + " = " + value + ";";
     }
 }

@@ -26,4 +26,9 @@ class ReturnNode extends Statement {
         ReturnNode r = (ReturnNode)other;
         return expr.equals(r.expr);
     }
+
+    @Override
+    public String toString() {
+        return "return " + expr + ";";
+    }
 }

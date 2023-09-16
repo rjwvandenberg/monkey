@@ -24,8 +24,5 @@ abstract class Node {
     
     public abstract boolean equals(Object other);
 
-    @Override
-    public String toString() {
-        return this.getClass().getSimpleName() + "[\"" + tokenLiteral().toString() + "\"]";
-    }
+    public abstract String toString();
 }

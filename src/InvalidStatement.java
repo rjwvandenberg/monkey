@@ -25,4 +25,9 @@ class InvalidStatement extends Statement {
         InvalidStatement i = (InvalidStatement)other;
         return token.equals(i.token);
     }
+
+    @Override
+    public String toString() {
+        return "<Invalid Statement>";
+    }
 }

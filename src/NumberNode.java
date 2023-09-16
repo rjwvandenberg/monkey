@@ -25,4 +25,9 @@ class NumberNode extends Expression {
         NumberNode n = (NumberNode)other;
         return token.equals(n.token);
     }
+
+    @Override
+    public String toString() {
+        return tokenLiteral();
+    }
 }

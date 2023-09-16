@@ -27,4 +27,9 @@ class ElseNode extends Expression {
         ElseNode e = (ElseNode)other;
         return block.equals(e.block);
     }
+
+    @Override
+    public String toString() {
+        return "else { " + block.stream().map(s->s.toString()).reduce("", (l,s)->l+s) + " }";
+    }
 }

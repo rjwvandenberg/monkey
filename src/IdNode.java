@@ -25,4 +25,9 @@ class IdNode extends Expression {
         IdNode i = (IdNode)other;
         return token.equals(i.token);
     }
+
+    @Override
+    public String toString() {
+        return tokenLiteral();
+    }
 }

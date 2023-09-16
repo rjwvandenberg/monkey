@@ -12,4 +12,6 @@ abstract class Statement extends Node {
     }
 
     public abstract boolean equals(Object other);
+
+    public abstract String toString();
 }

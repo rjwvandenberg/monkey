@@ -13,6 +13,13 @@ class Parser {
     ArrayList<Token> tokens;
     int position;
 
+    enum FIX {
+        PRE,
+        IN,
+        POST,
+        NONE,
+    }
+
     Parser(ArrayList<Token> tokens) {
         this.tokens = tokens;
         this.position = 0;
@@ -40,10 +47,7 @@ class Parser {
         switch(first.type) {
             case Let: return parseLet();
             case Return: return parseReturn();
-            default: {
-                nextToken();
-                throw new ParseException("Invalid statement token: " + first.toString());
-            }
+            default: return parseExpressionStatement();
         }
     }
 
@@ -63,6 +67,12 @@ class Parser {
         checkToken(TokenType.Semicolon);
 
         return new ReturnNode(literal, expr);
+    }
+
+    ExpressionStatement parseExpressionStatement() throws ParseException {
+        Expression expr = parseExpression();
+        checkToken(TokenType.Semicolon);
+        return new ExpressionStatement(new Token(TokenType.Return,""), expr);
     }
 
     ArrayList<Statement> parseBlock() throws ParseException {
@@ -91,8 +101,23 @@ class Parser {
     }
 
     Expression parseExpression() throws ParseException {
+        // Could read pratt parser, or figure it out myself first.
+        
+        // Start with empty tree
+        // Post/In/Pre?
+        // Expression tree = null;
+        // FIX fix = FIX.NONE;
+
+
+        // Read first
+
         // For now only accept simple integer/identifier, needs to be expanded with parser logic for multitoken expr.
         
+        // read token
+        // determine postfix, infix or prefix
+        // execute its parse function
+
+
         switch(peekToken().type) {
             case Integer: return parseNumber();
             case Identifier: return parseIdentifier();

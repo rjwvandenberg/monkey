@@ -23,6 +23,7 @@ class ParserTest {
             blockTest(),
             ifTest(),
             elseTest(),
+            expressionStatementTest(),
         };
 
         for (TestResult testResult : tests) {
@@ -127,6 +128,18 @@ class ParserTest {
                 new LetNode(k("let"), new IdNode(id("id")), new NumberNode(i("15"))),
                 new ReturnNode(k("return"), new NumberNode(i("90")))
             }))))
+        };
+        ArrayList<Statement> expected = new ArrayList(Arrays.asList(statements));
+        ArrayList<Statement> actual = new Parser(tokens).parse();
+        Tester t = new Tester(tokens, expected);
+        return t.equality(actual);
+    }
+
+    TestResult expressionStatementTest() {
+        String input = "andy;";
+        ArrayList<Token> tokens = getTokens(input);
+        Statement[] statements = new Statement[] {
+            new ExpressionStatement(k("return"), new IdNode(id("andy")))
         };
         ArrayList<Statement> expected = new ArrayList(Arrays.asList(statements));
         ArrayList<Statement> actual = new Parser(tokens).parse();

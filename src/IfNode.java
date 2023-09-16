@@ -30,4 +30,9 @@ class IfNode extends Expression {
         IfNode i = (IfNode)other;
         return condition.equals(i.condition) && block.equals(i.block);
     }
+
+    @Override
+    public String toString() {
+        return "if " + condition + " { " + block.stream().map(s->s.toString()).reduce("", (l,s)->l+s) + " }";
+    }
 }
