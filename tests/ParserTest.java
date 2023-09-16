@@ -19,6 +19,7 @@ class ParserTest {
             sampleTest(),
             letTest(),
             returnTest(),
+            blockTest(),
         };
 
         for (TestResult testResult : tests) {
@@ -67,6 +68,24 @@ class ParserTest {
 
         Tester t = new Tester(tokens, expected);
         return t.equality(actual);
+    }
+
+    TestResult blockTest() {
+        String input = "{ let id=15; return 90; }";
+        ArrayList<Token> tokens = getTokens(input);
+        Statement[] statements = new Statement[] {
+            new LetNode(k("let"), new IdNode(id("id")), new NumberNode(i("15"))),
+            new ReturnNode(k("return"), new NumberNode(i("90"))),
+        };
+        ArrayList<Statement> expected = new ArrayList(Arrays.asList(statements));
+
+        Tester t = new Tester(tokens, expected);
+        try {
+            ArrayList<Statement> actual = new Parser(tokens).parseBlock();
+            return t.equality(actual);
+        } catch (ParseException p) {
+            return t.error(p);
+        }
     }
 
     static ArrayList<Token> getTokens(String input) {

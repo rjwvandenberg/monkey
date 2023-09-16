@@ -65,6 +65,18 @@ class Parser {
         return new ReturnNode(literal, expr);
     }
 
+    ArrayList<Statement> parseBlock() throws ParseException {
+        checkToken(TokenType.LBrace);
+        ArrayList<Statement> l = new ArrayList();
+        
+        while (peekToken().type != TokenType.RBrace) {
+            l.add(parseStatement());
+        }
+
+        checkToken(TokenType.RBrace);
+        return l;
+    }
+
     Expression parseExpression() throws ParseException {
         // For now only accept simple integer/identifier, needs to be expanded with parser logic for multitoken expr.
         
