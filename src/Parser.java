@@ -39,7 +39,7 @@ class Parser {
         Token first = peekToken();
         switch(first.type) {
             case Let: return parseLet();
-            //case Return: return parseReturn();
+            case Return: return parseReturn();
             default: {
                 nextToken();
                 throw new ParseException("Invalid statement token: " + first.toString());
@@ -57,9 +57,13 @@ class Parser {
         return new LetNode(literal, id, expr);
     }
 
-    // ReturnNode parseReturn() {
-    //     return new Statement(new Token(TokenType.Illegal, "not implemented"));
-    // }
+    ReturnNode parseReturn() throws ParseException {
+        Token literal = nextToken();
+        Expression expr = parseExpression();
+        checkToken(TokenType.Semicolon);
+
+        return new ReturnNode(literal, expr);
+    }
 
     Expression parseExpression() throws ParseException {
         // For now only accept simple integer/identifier, needs to be expanded with parser logic for multitoken expr.
