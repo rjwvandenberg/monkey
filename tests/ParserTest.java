@@ -26,10 +26,10 @@ class ParserTest {
     }
 
     TestResult sampleTest() {
-        String input = "let x = 5;\nlet y = 10;\nlet foobar = add(5, 5);\nlet barfoo = 5 * 5 / 10 + 18 - add(5, 5) + multiply(123);\nlet anotherName = barfoo;";
+        String input = "let foobar = add(5, 5);\nlet barfoo = 5 * 5 / 10 + 18 - add(5, 5) + multiply(123);\nlet anotherName = barfoo;";
         ArrayList<Token> tokens = getTokens(input);
         Statement[] statements = new Statement[] {
-            new Statement(new Token(TokenType.Illegal, "")),
+            new LetNode(k("let"),new IdNode(id("foobar")),new Expression(id("add")))
         };
         ArrayList<Statement> expected = new ArrayList(Arrays.asList(statements));
 
@@ -43,8 +43,8 @@ class ParserTest {
         String input = "let x = 5;\nlet y = 10;\n";
         ArrayList<Token> tokens = getTokens(input);
         Statement[] statements = new Statement[] {
-            new LetNode(new Token(TokenType.Let, "let"), new IdNode(new Token(TokenType.Identifier, "x")), new NumberNode(new Token(TokenType.Integer, "5"))),
-            new LetNode(new Token(TokenType.Let, "let"), new IdNode(new Token(TokenType.Identifier, "y")), new NumberNode(new Token(TokenType.Integer, "10"))),
+            new LetNode(k("let"), new IdNode(id("x")), new NumberNode(i("5"))),
+            new LetNode(k("let"), new IdNode(id("y")), new NumberNode(i("10"))),
         };
         ArrayList<Statement> expected = new ArrayList(Arrays.asList(statements));
 
@@ -65,5 +65,15 @@ class ParserTest {
         }
 
         return tokens;
+    }
+
+    static Token k(String s) {
+        return new Token(TokenType.lookupKeyword(s).get(), s);
+    }
+    static Token id(String s) {
+        return new Token(TokenType.Identifier, s);
+    }
+    static Token i(String s) {
+        return new Token(TokenType.Integer, s);
     }
 }

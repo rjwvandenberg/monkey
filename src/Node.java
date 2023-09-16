@@ -21,4 +21,11 @@ abstract class Node {
     TokenType tokenType() {
         return token.type;
     }
+    
+    public abstract boolean equals(Object other);
+
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName() + "[\"" + tokenLiteral().toString() + "\"]";
+    }
 }

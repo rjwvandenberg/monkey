@@ -22,86 +22,93 @@ class Parser {
         ArrayList<Statement> l = new ArrayList();
         int iter = 0;
 
-        while (peekToken().type != TokenType.EOF && iter<tokens.size()) {
-            Statement s = parseStatement();
-            l.add(s);
-            iter++;
+        try {
+            while (peekToken().type != TokenType.EOF && iter<tokens.size()) {
+                Statement s = parseStatement();
+                l.add(s);
+                iter++;
+            }
+        } catch (ParseException p) {
+            l.add(new InvalidStatement(new Token(TokenType.Illegal, "InvalidStatement due to Parsing error at token position " + position + ":\n" + p.getMessage())));
         }
+
         return l;
     }
 
-    Statement parseStatement() {
+    Statement parseStatement() throws ParseException {
         Token first = peekToken();
         switch(first.type) {
             case Let: return parseLet();
-            case Return: return parseReturn();
-            default: return new Statement(new Token(TokenType.Illegal, "Missing statement token. Got: " + first.toString()));
+            //case Return: return parseReturn();
+            default: {
+                nextToken();
+                throw new ParseException("Invalid statement token: " + first.toString());
+            }
         }
     }
 
-    Statement parseLet() {
-        ArrayList<String> errors = new ArrayList();
+    LetNode parseLet() throws ParseException{
         Token literal = nextToken();
         IdNode id = parseIdentifier();
-        Token assign = nextToken();
+        checkToken(TokenType.Assign);
         Expression expr = parseExpression();
-        Token semicolon = nextToken();
+        checkToken(TokenType.Semicolon);
 
-        if (assign.type != TokenType.Assign) {
-            errors.add(missingToken(TokenType.Assign, assign));
-        }
-        if (semicolon.type != TokenType.Semicolon) {
-            errors.add(missingToken(TokenType.Semicolon, semicolon));
-        }
-
-        if (errors.size() > 0) {
-            return new Statement(new Token(TokenType.Illegal, String.join("\n", errors)));
-        } else {
-            return new LetNode(literal, id, expr);
-        }
+        return new LetNode(literal, id, expr);
     }
 
-    Statement parseReturn() {
-        return new Statement(new Token(TokenType.Illegal, "not implemented"));
-    }
+    // ReturnNode parseReturn() {
+    //     return new Statement(new Token(TokenType.Illegal, "not implemented"));
+    // }
 
-    Expression parseExpression() {
-        // consume until ; ?
-
-        // for now only identifier and number are legal.
+    Expression parseExpression() throws ParseException {
+        // For now only accept simple integer/identifier, needs to be expanded with parser logic for multitoken expr.
+        
         switch(peekToken().type) {
-            case Integer: break;
-            case Identifier: break;
+            case Integer: return parseNumber();
+            case Identifier: return parseIdentifier();
+            default: throw new ParseException("Invalid expression token: " + nextToken().toString());
         }
-        position+=100;
-
-        return new Expression(new Token(TokenType.Illegal, "not implemented"));
     }
 
-    IdNode parseIdentifier() {
-        return new IdNode(new Token(TokenType.Illegal, "not implemented"));
+    IdNode parseIdentifier() throws ParseException {
+        Token id = nextToken();
+        if (id.type != TokenType.Identifier) {
+            throw new ParseException("Invalid id token: " + id.toString());
+        }
+        return new IdNode(id);
     }
 
-    NumberNode parseNumber() {
-
-        return new NumberNode(new Token(TokenType.Illegal, "not implemented"));
+    NumberNode parseNumber() throws ParseException {
+        Token number = nextToken();
+        if (number.type != TokenType.Integer) {
+            throw new ParseException("Invalid integer token: " + number.toString());
+        }
+        return new NumberNode(number);
     }
 
-    Token nextToken() {
+    Token nextToken() throws ParseException {
         Token t = peekToken();
         position += 1;
         return t;
     }
 
-    Token peekToken() {
+    Token peekToken() throws ParseException {
         return peekToken(position);
     }
 
-    Token peekToken(int index) {
+    Token peekToken(int index) throws ParseException {
         if (index >= tokens.size()) {
-            return new Token(TokenType.Illegal, "Out of bounds index exception");
+            throw new ParseException("Out of token index bounds exception");
         }
         return tokens.get(position);
+    }
+
+    void checkToken(TokenType type) throws ParseException {
+        Token t = nextToken();
+        if (t.type != type) {
+            throw new ParseException("Invalid " + type.toString() + " token: " + t.toString());
+        }
     }
 
     String missingToken(TokenType missing, Token t) {

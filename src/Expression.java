@@ -8,9 +8,10 @@ import rnee.monkey.Token;
 * @author	René van den Berg
 * @version	1
 */
-class Expression extends Node {
-    Expression(Token token) {
-        
+abstract class Expression extends Node {
+    Expression(Token token) {   
         super(token);
     }
+
+    public abstract boolean equals(Object other);
 }

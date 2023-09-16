@@ -35,7 +35,7 @@ public class TestResult {
 
             // Tests and error formatting is too specific. Made for testing (object -> object) functions that have ordered outputs, works ok enough for now. 
             int before = 20;
-            int after = 50;
+            int after = 400;
 
             String expected = tester.expected.toString();
             String actual = tester.actual.toString();
@@ -54,11 +54,11 @@ public class TestResult {
 
             String exstr = expected.substring(offset, Math.min(offset+after, expected.length()));
             String acstr = actual.substring(offset, Math.min(offset+after, actual.length()));
-            String caret = " ".repeat(4 + 10 + before + Math.min(difference-before, 0)) + "^";
+            String caret = " ".repeat(4 + 10 + before + Math.min(difference-before, 0)) + "\\/";
 
+            sb.append(caret).append('\n');
             sb.append("    Expected: ").append(exstr).append('\n');
             sb.append("    Actual  : ").append(acstr).append('\n');
-            sb.append(caret).append('\n');
         }
 
         return sb.toString();

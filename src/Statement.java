@@ -6,8 +6,10 @@ package rnee.monkey;
 * @author	René van den Berg
 * @version	1
 */
-class Statement extends Node {
+abstract class Statement extends Node {
     Statement(Token token) {
         super(token);
     }
+
+    public abstract boolean equals(Object other);
 }

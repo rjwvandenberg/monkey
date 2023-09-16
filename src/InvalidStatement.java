@@ -1,7 +1,8 @@
 package rnee.monkey;
-class IdNode extends Expression {
-    IdNode(Token literal) {
-        super(literal);
+
+class InvalidStatement extends Statement {
+    InvalidStatement(Token t) {
+        super(t);
     }
 
     @Override
@@ -12,10 +13,10 @@ class IdNode extends Expression {
         if (other == null) {
             return false;
         }
-        if (!(other instanceof IdNode)) {
+        if (!(other instanceof InvalidStatement)) {
             return false;
         }
-        IdNode i = (IdNode)other;
+        InvalidStatement i = (InvalidStatement)other;
         return token.equals(i.token);
     }
 }
