@@ -1,5 +1,6 @@
 package rnee.monkey;
 
+import java.util.Optional;
 import java.lang.Thread;
 import java.lang.StackTraceElement;
 
@@ -19,10 +20,12 @@ public class Tester<A,B> {
     public A in;
     public B expected;
     public B actual;
+    public Optional<Exception> error;
 
     Tester(A in, B expected) {
         this.in = in;
         this.expected = expected;
+        this.error = Optional.empty();
 
         StackTraceElement caller = Thread.currentThread().getStackTrace()[2];
         method = caller.getMethodName();
@@ -39,6 +42,11 @@ public class Tester<A,B> {
         } else {
             return fail("value not equal to expected");
         }
+    }
+
+    TestResult error(Exception e) {
+        this.error = Optional.ofNullable(e);
+        return fail("Encountered error during test execution: ");
     }
 
     TestResult success() {
