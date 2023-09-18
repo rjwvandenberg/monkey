@@ -24,6 +24,7 @@ class ParserTest {
             numberTest(),
             identifierTest(),
             plusTest(),
+            notTest(),
             // ifTest(),
             // elseTest(),
         };
@@ -135,6 +136,18 @@ class ParserTest {
         ArrayList<Token> tokens = getTokens(input);
         Statement[] statements = new Statement[] {
             new ExpressionStatement(k("return"),new BinaryExpression(new Token(TokenType.Plus,"+"), new Number(i("5"),5), new Number(i("3"),3)))
+        };
+        ArrayList<Statement> expected = new ArrayList(Arrays.asList(statements));
+        ArrayList<Statement> actual = new Parser(tokens).parse();
+        Tester t = new Tester(tokens, expected);
+        return t.equality(actual);
+    }
+
+    TestResult notTest() {
+        String input = "!andy;";
+        ArrayList<Token> tokens = getTokens(input);
+        Statement[] statements = new Statement[] {
+            new ExpressionStatement(k("return"),new UnaryExpression(new Token(TokenType.Not,"!"), new IdNode(id("andy"))))
         };
         ArrayList<Statement> expected = new ArrayList(Arrays.asList(statements));
         ArrayList<Statement> actual = new Parser(tokens).parse();

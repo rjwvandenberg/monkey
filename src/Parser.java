@@ -94,7 +94,8 @@ class Parser {
     }
 
     Expression parseExpression() throws ParseException {
-        // operation(node,nextoperation)
+        //prefix e is an expression, or else this function should not have been called.
+        //infix decides to keep parsing or not depending on the token encountered
         Expression e = parsePrefix();
         e = parseInfix(e);
         // swap precedence
@@ -112,24 +113,16 @@ class Parser {
             case Integer: {
                 return parseNumber();
             }
-            // Unary number expressions
-            // Number prefixes replace with  (0-5) , illegal until parentheses are implemented
-            // Need to parse peekToken(pos+1) or combine this token with the next one
-            // Or handle it in parseNumber? But then -(5*3) is not allowed?
+            // Unary Operators
+            case Not:
             case Plus:
             case Minus: {
-                throw new ParseException("Expression PREFIX - and + are illegal until parentheses are implemented.");
-                // break;
+                return new UnaryExpression(nextToken(), parseExpression());
             }
             // Boolean expressions
             case False: 
             case True: {
                 throw new ParseException("Boolean expressions not implemented: " + nextToken());
-                // break;
-            }
-            // Unary boolean expression
-            case Not: {
-                throw new ParseException("Unary boolean Not ! not implemented.");
                 // break;
             }
             // ManualPrecedence expression
@@ -185,12 +178,6 @@ class Parser {
     */
     Expression parseInfix(Expression e) throws ParseException {
         switch(peekToken().type) {
-            case Identifier: {
-                throw new ParseException("Unary operators not implemented for Identifier INFIX");
-            }
-            case Integer: {
-                throw new ParseException("Unary operators not implemented for Number INFIX");
-            }
             // binary expressions
             case Multiply:
             case Divide:
@@ -198,67 +185,36 @@ class Parser {
             case Greater:
             case Equals:
             case NotEquals:
-            // Unary/binary as infixes number expressions
-            // -+5 
             case Plus:
             case Minus: {
-                // NumberExpression and expect postfix to add to this expression.
-                throw new ParseException("YAP");
+                return new BinaryExpression(nextToken(), e, parseExpression());
             }
-            // Boolean expressions
-            case False: 
-            case True: {
-                throw new ParseException("Boolean expressions not implemented: " + nextToken());
-                // break;
-            }
-            // Unary boolean expression
-            case Not: {
-                throw new ParseException("Unary boolean Not ! not implemented.");
-                // break;
-            }
-            // ManualPrecedence expression
-            case LParen: {
-                throw new ParseException("Implement ( precedence");
-                // break;
-            }
-            // block prefix expression
-            case LBrace: {
-                throw new ParseException("expression blocks not supported?");
-                // break;
-            }
-            // Function expression
-            case Function: {
-                throw new ParseException("Function not implemented, parseFunction");
-                // break;
-            }
-            case Else: {
-                if (e.token.type == TokenType.If) {
-                    throw new ParseException("Expression else not implemented");
-                } else {
-                    throw new ParseException("Expression else only permitted after expression if");
-                }
-            }
-            // If expression
-            case If: {
-                throw new ParseException("If not impelemnted");
-                // break;
-            }
-            // End statement
             case Semicolon:{
-                // do not read semicolon token as it is part of the syntax surrounding this expression.
+                // do not read semicolon token as it is part of the preceding statement
                 return e;
             }
-            case RParen:
-            case RBrace: 
             // Illegal INFIXes
+            case RParen:
+            case RBrace:
+            case Not:
+            case False: 
+            case True:
             case Assign:
             case Comma:
+            case Identifier:
+            case Integer:
+            case LParen:
+            case LBrace: 
+            case Function:
+            case Else:
+            case If: 
                 throw new ParseException("Expected expression, found illegal INFIX token " + nextToken());
             case Let:
             case Return:
                 throw new ParseException("Expected expression, found statement token " + nextToken());
             case EOF: {
-                return e;
+                throw new ParseException("Encountered EOF, expected INFIX token: " + nextToken());
+                //return e;
             }
             default: throw new ParseException("Expression INFIX token " + nextToken() + " not implemented.");
         }
