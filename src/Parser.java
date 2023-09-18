@@ -122,8 +122,7 @@ class Parser {
             // Boolean expressions
             case False: 
             case True: {
-                throw new ParseException("Boolean expressions not implemented: " + nextToken());
-                // break;
+                return parseBoolean();
             }
             // ManualPrecedence expression
             case LParen: {
@@ -240,6 +239,14 @@ class Parser {
         } catch(NumberFormatException e) {
             throw new ParseException("Cannot parse value " + number.literal + " as integer.");
         }
+    }
+
+    Bool parseBoolean() throws ParseException {
+        Token b = nextToken();
+        if (b.type != TokenType.True && b.type != TokenType.False) {
+            throw new ParseException("Invalid bool token: " + b.toString());
+        }
+        return new Bool(b, b.type==TokenType.True);
     }
 
     Token nextToken() throws ParseException {
