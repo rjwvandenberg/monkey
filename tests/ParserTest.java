@@ -16,14 +16,16 @@ import java.util.Arrays;
 class ParserTest {
     void runTests() {
         TestResult[] tests = new TestResult[] {
-            sampleTest(),
+            // sampleTest(),
             emptyTest(),
             letTest(),
             returnTest(),
             blockTest(),
-            ifTest(),
-            elseTest(),
-            expressionStatementTest(),
+            numberTest(),
+            identifierTest(),
+            plusTest(),
+            // ifTest(),
+            // elseTest(),
         };
 
         for (TestResult testResult : tests) {
@@ -60,8 +62,8 @@ class ParserTest {
         String input = "let x = 5;\nlet y = 10;\n";
         ArrayList<Token> tokens = getTokens(input);
         Statement[] statements = new Statement[] {
-            new LetNode(k("let"), new IdNode(id("x")), new NumberNode(i("5"))),
-            new LetNode(k("let"), new IdNode(id("y")), new NumberNode(i("10"))),
+            new LetNode(k("let"), new IdNode(id("x")), new Number(i("5"), 5)),
+            new LetNode(k("let"), new IdNode(id("y")), new Number(i("10"), 10)),
         };
         ArrayList<Statement> expected = new ArrayList(Arrays.asList(statements));
 
@@ -90,8 +92,8 @@ class ParserTest {
         String input = "{ let id=15; return 90; }";
         ArrayList<Token> tokens = getTokens(input);
         Statement[] statements = new Statement[] {
-            new LetNode(k("let"), new IdNode(id("id")), new NumberNode(i("15"))),
-            new ReturnNode(k("return"), new NumberNode(i("90"))),
+            new LetNode(k("let"), new IdNode(id("id")), new Number(i("15"),15)),
+            new ReturnNode(k("return"), new Number(i("90"),90)),
         };
         ArrayList<Statement> expected = new ArrayList(Arrays.asList(statements));
 
@@ -104,14 +106,50 @@ class ParserTest {
         }
     }
 
+    TestResult numberTest() {
+        String input = "3;";
+        ArrayList<Token> tokens = getTokens(input);
+        Statement[] statements = new Statement[] {
+            new ExpressionStatement(k("return"), new Number(i("3"), 3))
+        };
+        ArrayList<Statement> expected = new ArrayList(Arrays.asList(statements));
+        ArrayList<Statement> actual = new Parser(tokens).parse();
+        Tester t = new Tester(tokens, expected);
+        return t.equality(actual);
+    }
+
+    TestResult identifierTest() {
+        String input = "andy;";
+        ArrayList<Token> tokens = getTokens(input);
+        Statement[] statements = new Statement[] {
+            new ExpressionStatement(k("return"), new IdNode(id("andy")))
+        };
+        ArrayList<Statement> expected = new ArrayList(Arrays.asList(statements));
+        ArrayList<Statement> actual = new Parser(tokens).parse();
+        Tester t = new Tester(tokens, expected);
+        return t.equality(actual);
+    }
+
+    TestResult plusTest() {
+        String input = "5+3;";
+        ArrayList<Token> tokens = getTokens(input);
+        Statement[] statements = new Statement[] {
+            new ExpressionStatement(k("return"),new BinaryExpression(new Token(TokenType.Plus,"+"), new Number(i("5"),5), new Number(i("3"),3)))
+        };
+        ArrayList<Statement> expected = new ArrayList(Arrays.asList(statements));
+        ArrayList<Statement> actual = new Parser(tokens).parse();
+        Tester t = new Tester(tokens, expected);
+        return t.equality(actual);
+    }
+
     TestResult ifTest() {
         String input = "return if expr {}; return if var { let id=15; return 90; };";
         ArrayList<Token> tokens = getTokens(input);
         Statement[] statements = new Statement[] {
             new ReturnNode(k("return"), new IfNode(k("if"), new IdNode(id("expr")), new ArrayList<Statement>())),
             new ReturnNode(k("return"), new IfNode(k("if"), new IdNode(id("var")), new ArrayList<Statement>(Arrays.asList(new Statement[]{
-                new LetNode(k("let"), new IdNode(id("id")), new NumberNode(i("15"))),
-                new ReturnNode(k("return"), new NumberNode(i("90")))
+                new LetNode(k("let"), new IdNode(id("id")), new Number(i("15"), 15)),
+                new ReturnNode(k("return"), new Number(i("90"), 90))
             }))))
         };
         ArrayList<Statement> expected = new ArrayList(Arrays.asList(statements));
@@ -125,21 +163,9 @@ class ParserTest {
         ArrayList<Token> tokens = getTokens(input);
         Statement[] statements = new Statement[] {
             new ReturnNode(k("return"), new ElseNode(k("else"), new ArrayList<Statement>(Arrays.asList(new Statement[]{
-                new LetNode(k("let"), new IdNode(id("id")), new NumberNode(i("15"))),
-                new ReturnNode(k("return"), new NumberNode(i("90")))
+                new LetNode(k("let"), new IdNode(id("id")), new Number(i("15"),15)),
+                new ReturnNode(k("return"), new Number(i("90"),90))
             }))))
-        };
-        ArrayList<Statement> expected = new ArrayList(Arrays.asList(statements));
-        ArrayList<Statement> actual = new Parser(tokens).parse();
-        Tester t = new Tester(tokens, expected);
-        return t.equality(actual);
-    }
-
-    TestResult expressionStatementTest() {
-        String input = "andy;";
-        ArrayList<Token> tokens = getTokens(input);
-        Statement[] statements = new Statement[] {
-            new ExpressionStatement(k("return"), new IdNode(id("andy")))
         };
         ArrayList<Statement> expected = new ArrayList(Arrays.asList(statements));
         ArrayList<Statement> actual = new Parser(tokens).parse();

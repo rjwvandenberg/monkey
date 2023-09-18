@@ -28,6 +28,6 @@ class InvalidStatement extends Statement {
 
     @Override
     public String toString() {
-        return "<Invalid Statement>";
+        return "<Invalid Statement: " + tokenLiteral() + ">";
     }
 }

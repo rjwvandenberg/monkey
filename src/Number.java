@@ -6,9 +6,11 @@ package rnee.monkey;
 * @author	René van den Berg
 * @version	1
 */
-class NumberNode extends Expression {
-    NumberNode(Token literal) {
+class Number extends Expression {
+    int value;
+    Number(Token literal, int value) {
         super(literal);
+        this.value = value;
     }
 
     @Override
@@ -19,15 +21,15 @@ class NumberNode extends Expression {
         if (other == null) {
             return false;
         }
-        if (!(other instanceof NumberNode)) {
+        if (!(other instanceof Number)) {
             return false;
         }
-        NumberNode n = (NumberNode)other;
+        Number n = (Number)other;
         return token.equals(n.token);
     }
 
     @Override
     public String toString() {
-        return tokenLiteral();
+        return "" + value;
     }
 }

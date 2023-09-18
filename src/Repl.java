@@ -70,14 +70,20 @@ class Repl {
     private void evaluateContext() {
         String source = String.join("\n", c.subList(0,c.size()-1));
         Lexer l = new Lexer(source);
-        StringBuffer sb = new StringBuffer();
+        
+        ArrayList<Token> tl = new ArrayList();
         Token t = new Token(TokenType.Illegal, "");
         while(t.type != TokenType.EOF) {
             t = l.nextToken();
-            sb.append(t.toString());
-            sb.append('\n');
+            tl.add(t);
         }
-        v.printf("%s%s%s", BR, sb, BR);
+        
+        Parser p = new Parser(tl);
+        ArrayList<Statement> sl = p.parse();
+        for (Statement s : sl) {
+            System.out.println(s);
+        }
+
     }
 
     private void printContext() {

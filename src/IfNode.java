@@ -33,6 +33,6 @@ class IfNode extends Expression {
 
     @Override
     public String toString() {
-        return "if " + condition + " { " + block.stream().map(s->s.toString()).reduce("", (l,s)->l+s) + " }";
+        return "if " + condition + " { " + block.stream().map(s->s.toString()).reduce("", (l,s)->l+s+" ") + " }";
     }
 }

@@ -9,6 +9,7 @@ import rnee.monkey.Token;
 * @version	1
 */
 abstract class Expression extends Node {
+    Token operator;
     Expression(Token token) {   
         super(token);
     }
